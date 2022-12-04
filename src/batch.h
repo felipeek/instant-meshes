@@ -20,3 +20,9 @@ extern void batch_process(const std::string &input, const std::string &output,
                           int vertex_count, Float creaseAngle, bool extrinsic,
                           bool align_to_boundaries, int smooth_iter,
                           int knn_points, bool dominant, bool deterministic);
+
+extern Mesh_Simple_Representation batch_process_in_memory(int vertices_size, const double* vertices, int triangles_size, const long long* triangles,
+                   int rosy, int posy, Float scale, int face_count,
+                   int vertex_count, Float creaseAngle, bool extrinsic,
+                   bool align_to_boundaries, int smooth_iter, int knn_points,
+                   bool pure_quad, bool deterministic);

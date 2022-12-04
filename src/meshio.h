@@ -31,6 +31,9 @@ extern void
 load_pointcloud(const std::string &filename, MatrixXf &V, MatrixXf &N,
                 const ProgressCallback &progress = ProgressCallback());
 
+extern void load_from_memory(MatrixXu &F, MatrixXf &V, MatrixXf &N, int vertices_size, const double* vertices, int triangles_size, const long long* triangles,
+              const ProgressCallback &progress = ProgressCallback());
+
 extern void write_mesh(const std::string &filename, const MatrixXu &F,
                       const MatrixXf &V,
                       const MatrixXf &N = MatrixXf(),
@@ -54,3 +57,11 @@ extern void write_ply(const std::string &filename, const MatrixXu &F,
                       const MatrixXf &UV = MatrixXf(),
                       const MatrixXf &C = MatrixXf(),
                       const ProgressCallback &progress = ProgressCallback());
+
+extern Mesh_Simple_Representation write_to_memory(const MatrixXu &F,
+                const MatrixXf &V,
+                const MatrixXf &N = MatrixXf(),
+                const MatrixXf &Nf = MatrixXf(),
+                const MatrixXf &UV = MatrixXf(),
+                const MatrixXf &C = MatrixXf(),
+                const ProgressCallback &progress = ProgressCallback());

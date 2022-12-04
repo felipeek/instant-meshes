@@ -147,7 +147,7 @@ elseif(WIN32)
   set(EXTRA_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/resources/im.rc")
 endif()
 
-add_executable(InstantMeshes MACOSX_BUNDLE
+add_library(InstantMeshes SHARED
   resources.cpp
   src/glutil.h src/glutil.cpp
   src/widgets.h src/widgets.cpp
@@ -195,6 +195,6 @@ else()
   #set_target_properties(InstantMeshes PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
 endif()
 
-if (UNIX AND NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
-  add_custom_command(TARGET InstantMeshes POST_BUILD COMMAND strip $<TARGET_FILE:InstantMeshes>)
-endif()
+#if (UNIX AND NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
+#  add_custom_command(TARGET InstantMeshes POST_BUILD COMMAND strip $<TARGET_FILE:InstantMeshes>)
+#endif()

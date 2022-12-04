@@ -450,13 +450,13 @@ void load_obj(const std::string &filename, MatrixXu &F, MatrixXf &V,
          << timeString(timer.value()) << ")" << endl;
 }
 
-void load_from_memory(MatrixXu &F, MatrixXf &V, int vertices_size, const double* vertices, int triangles_size, const long long* triangles,
+void load_from_memory(MatrixXu &F, MatrixXf &V, MatrixXf &N, int vertices_size, const double* vertices, int triangles_size, const long long* triangles,
               const ProgressCallback &progress) {
     F.resize(3, triangles_size);
     for (int i = 0; i < triangles_size; ++i) {
-        F(0, i) = (uint_32_t)triangles[i * 3];
-        F(1, i) = (uint_32_t)triangles[i * 3 + 1];
-        F(2, i) = (uint_32_t)triangles[i * 3 + 2];
+        F(0, i) = (uint32_t)triangles[i * 3];
+        F(1, i) = (uint32_t)triangles[i * 3 + 1];
+        F(2, i) = (uint32_t)triangles[i * 3 + 2];
     }
 
     V.resize(3, vertices_size);
@@ -632,4 +632,64 @@ void write_obj(const std::string &filename, const MatrixXu &F,
     if (irregular.size() > 0)
         cout << irregular.size() << " irregular faces, ";
     cout << "took " << timeString(timer.value()) << ")" << endl;
+}
+
+Mesh_Simple_Representation write_to_memory(const MatrixXu &F,
+                const MatrixXf &V, const MatrixXf &N, const MatrixXf &Nf,
+                const MatrixXf &UV, const MatrixXf &C,
+                const ProgressCallback &progress) {
+
+    Mesh_Simple_Representation msr;
+    msr.vertices_size = 3 * V.cols();
+    msr.vertices = (double*)malloc(sizeof(double) * 3 * V.cols());
+
+    for (uint32_t i=0; i<V.cols(); ++i) {
+        msr.vertices[3 * i + 0] = V(0, i);
+        msr.vertices[3 * i + 1] = V(1, i);
+        msr.vertices[3 * i + 2] = V(2, i);
+    }
+
+    /* Check for irregular faces */
+    std::map<uint32_t, std::pair<uint32_t, std::map<uint32_t, uint32_t>>> irregular;
+    size_t nIrregular = 0;
+
+    std::vector<int> indices_vec = std::vector<int>();
+
+    for (uint32_t f=0; f<F.cols(); ++f) {
+        if (F.rows() == 4) {
+            if (F(2, f) == F(3, f)) {
+                nIrregular++;
+                auto &value = irregular[F(2, f)];
+                value.first = f;
+                value.second[F(0, f)] = F(1, f);
+                continue;
+            }
+        }
+        for (uint32_t j=0; j<F.rows(); ++j) {
+            uint32_t idx = F(j, f);
+            idx += 1;
+            indices_vec.push_back(idx);
+        }
+    }
+
+    for (auto item : irregular) {
+        auto face = item.second;
+        uint32_t v = face.second.begin()->first, first = v, i = 0;
+        while (true) {
+            uint32_t idx = v + 1;
+            indices_vec.push_back(idx);
+
+            v = face.second[v];
+            if (v == first || ++i == face.second.size())
+                break;
+        }
+    }
+
+    msr.triangles_size = indices_vec.size();
+    msr.triangles = (long long*)malloc(sizeof(long long) * indices_vec.size());
+    for (int i = 0; i < indices_vec.size(); ++i) {
+        msr.triangles[i] = indices_vec[i];
+    }
+
+    return msr;
 }
