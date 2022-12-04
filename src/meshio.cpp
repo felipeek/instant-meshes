@@ -450,6 +450,23 @@ void load_obj(const std::string &filename, MatrixXu &F, MatrixXf &V,
          << timeString(timer.value()) << ")" << endl;
 }
 
+void load_from_memory(MatrixXu &F, MatrixXf &V, int vertices_size, const double* vertices, int triangles_size, const long long* triangles,
+              const ProgressCallback &progress) {
+    F.resize(3, triangles_size);
+    for (int i = 0; i < triangles_size; ++i) {
+        F(0, i) = (uint_32_t)triangles[i * 3];
+        F(1, i) = (uint_32_t)triangles[i * 3 + 1];
+        F(2, i) = (uint_32_t)triangles[i * 3 + 2];
+    }
+
+    V.resize(3, vertices_size);
+    for (int i = 0; i < vertices_size; ++i) {
+        V(0, i) = (Float)vertices[i * 3];
+        V(1, i) = (Float)vertices[i * 3 + 1];
+        V(2, i) = (Float)vertices[i * 3 + 2];
+    }
+}
+
 void load_pointcloud(const std::string &filename, MatrixXf &V, MatrixXf &N,
                      const ProgressCallback &progress) {
     std::ifstream is(filename);
