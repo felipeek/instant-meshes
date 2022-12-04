@@ -175,7 +175,7 @@ add_library(InstantMeshes SHARED
 add_definitions(${NANOGUI_EXTRA_DEFS})
 target_link_libraries(InstantMeshes tbb_static nanogui ${NANOGUI_EXTRA_LIBS})
 
-set_target_properties(InstantMeshes PROPERTIES OUTPUT_NAME "Instant Meshes")
+set_target_properties(InstantMeshes PROPERTIES OUTPUT_NAME "instantmesheswrapper")
 
 if (WIN32)
   # Quench some warnings on MSVC
@@ -184,7 +184,7 @@ if (WIN32)
   endif()
 elseif (APPLE)
   # Build an application bundle on OSX
-  set_target_properties(InstantMeshes PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Instant Meshes")
+  set_target_properties(InstantMeshes PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "instantmesheswrapper")
   set_target_properties(InstantMeshes PROPERTIES MACOSX_BUNDLE_BUNDLE_GUI_IDENTIFIER "com.im.InstantMeshes")
   set_target_properties(InstantMeshes PROPERTIES MACOSX_BUNDLE_ICON_FILE im.icns)
   set_target_properties(InstantMeshes PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/resources/MacOSXBundleInfo.plist.in)
@@ -196,5 +196,5 @@ else()
 endif()
 
 #if (UNIX AND NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
-#  add_custom_command(TARGET InstantMeshes POST_BUILD COMMAND strip $<TARGET_FILE:InstantMeshes>)
+#  add_custom_command(TARGET instantmesheswrapper POST_BUILD COMMAND strip $<TARGET_FILE:InstantMeshes>)
 #endif()

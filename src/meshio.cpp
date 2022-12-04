@@ -452,11 +452,18 @@ void load_obj(const std::string &filename, MatrixXu &F, MatrixXf &V,
 
 void load_from_memory(MatrixXu &F, MatrixXf &V, MatrixXf &N, int vertices_size, const double* vertices, int triangles_size, const long long* triangles,
               const ProgressCallback &progress) {
+
+    std::cout << "Received triangles_size: " << triangles_size << std::endl;
+    std::cout << "First triangle: [" << triangles[0] << ", " << triangles[1] << ", " << triangles[2] << "]" << std::endl;
+    std::cout << "Second triangle: [" << triangles[3] << ", " << triangles[4] << ", " << triangles[5] << "]" << std::endl;
+    std::cout << "Received vertices_size: " << vertices_size << std::endl;
+    std::cout << "First vertex: [" << vertices[0] << ", " << vertices[1] << ", " << vertices[2] << "]" << std::endl;
+    std::cout << "Second vertex: [" << vertices[3] << ", " << vertices[4] << ", " << vertices[5] << "]" << std::endl;
     F.resize(3, triangles_size);
     for (int i = 0; i < triangles_size; ++i) {
-        F(0, i) = (uint32_t)triangles[i * 3];
-        F(1, i) = (uint32_t)triangles[i * 3 + 1];
-        F(2, i) = (uint32_t)triangles[i * 3 + 2];
+        F(0, i) = (uint32_t)triangles[i * 3] - 1;
+        F(1, i) = (uint32_t)triangles[i * 3 + 1] - 1;
+        F(2, i) = (uint32_t)triangles[i * 3 + 2] - 1;
     }
 
     V.resize(3, vertices_size);
@@ -640,7 +647,7 @@ Mesh_Simple_Representation write_to_memory(const MatrixXu &F,
                 const ProgressCallback &progress) {
 
     Mesh_Simple_Representation msr;
-    msr.vertices_size = 3 * V.cols();
+    msr.vertices_size = V.cols();
     msr.vertices = (double*)malloc(sizeof(double) * 3 * V.cols());
 
     for (uint32_t i=0; i<V.cols(); ++i) {
@@ -685,7 +692,7 @@ Mesh_Simple_Representation write_to_memory(const MatrixXu &F,
         }
     }
 
-    msr.triangles_size = indices_vec.size();
+    msr.triangles_size = indices_vec.size() / 3;
     msr.triangles = (long long*)malloc(sizeof(long long) * indices_vec.size());
     for (int i = 0; i < indices_vec.size(); ++i) {
         msr.triangles[i] = indices_vec[i];
