@@ -247,8 +247,6 @@ Mesh_Simple_Representation batch_process_in_memory(int vertices_size, const doub
     /* Load the input mesh */
     load_from_memory(F, V, N, vertices_size, vertices, triangles_size, triangles);
 
-    write_obj("/home/felipeek/Desktop/instant_meshes_in.obj", F, V, N); // TMP
-
     bool pointcloud = F.size() == 0;
 
     Timer<> timer;
@@ -401,7 +399,6 @@ Mesh_Simple_Representation batch_process_in_memory(int vertices_size, const doub
             mRes.scale(), crease_out, true, pure_quad, bvh, smooth_iter);
     cout << "Extraction is done. (total time: " << timeString(timer.reset()) << ")" << endl;
 
-    write_obj("/home/felipeek/Desktop/instant_meshes_out.obj", F_extr, O_extr, MatrixXf(), Nf_extr); // TMP
     Mesh_Simple_Representation msr = write_to_memory(F_extr, O_extr, MatrixXf(), Nf_extr);
 
     if (bvh)

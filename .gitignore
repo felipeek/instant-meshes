@@ -21,3 +21,4 @@ datasets
 *.filters
 *.sdf
 *.sln
+bin/

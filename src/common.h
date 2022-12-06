@@ -374,3 +374,10 @@ inline Vector3f hsv_to_rgb(Float h, Float s, Float v) {
         default: return Vector3f(v, p, q); break;
     }
 }
+
+typedef struct {
+    int vertices_size;
+    int triangles_size;
+    double* vertices;
+    long long* triangles;
+} Mesh_Simple_Representation;
