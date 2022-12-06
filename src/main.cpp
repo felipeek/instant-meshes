@@ -22,6 +22,45 @@ NANOGUI_FORCE_DISCRETE_GPU();
 
 int nprocs = -1;
 
+extern "C" Mesh_Simple_Representation instant_meshes_wrapper_remesh(int vertices_size, const double* vertices,
+    int triangles_size, const long long* triangles, int desired_vertex_count)
+{
+    bool extrinsic = true, dominant = false, align_to_boundaries = false;
+    bool fullscreen = false, help = false, deterministic = false, compat = false;
+    int rosy = 4, posy = 4, face_count = -1, vertex_count = -1;
+    uint32_t knn_points = 10, smooth_iter = 2;
+    Float crease_angle = -1, scale = -1;
+    std::string batchOutput;
+    #if defined(__APPLE__)
+        bool launched_from_finder = false;
+    #endif
+
+    // set desired vertex count
+    vertex_count = desired_vertex_count;
+
+    // make sure output is triangulated
+    rosy = 6;
+    posy = 3;
+
+    tbb::task_scheduler_init init(nprocs == -1 ? tbb::task_scheduler_init::automatic : nprocs);
+
+    try {
+        return batch_process_in_memory(vertices_size, vertices, triangles_size, triangles, rosy, posy, scale, face_count,
+                        vertex_count, crease_angle, extrinsic,
+                        align_to_boundaries, smooth_iter, knn_points,
+                        !dominant, deterministic);
+    } catch (const std::exception &e) {
+        cerr << "Caught runtime error : " << e.what() << endl;
+        return (Mesh_Simple_Representation){0};
+    }
+}
+
+extern "C" void instant_meshes_wrapper_free_msr(Mesh_Simple_Representation msr)
+{
+    free(msr.triangles);
+    free(msr.vertices);
+}
+
 int main(int argc, char **argv) {
     std::vector<std::string> args;
     bool extrinsic = true, dominant = false, align_to_boundaries = false;

@@ -63,20 +63,20 @@ endif()
 
 # Build NanoGUI
 set(NANOGUI_BUILD_EXAMPLE OFF CACHE BOOL " " FORCE)
-set(NANOGUI_BUILD_SHARED  OFF CACHE BOOL " " FORCE)
+set(NANOGUI_BUILD_SHARED  ON CACHE BOOL " " FORCE)
 set(NANOGUI_BUILD_PYTHON  OFF CACHE BOOL " " FORCE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ext/nanogui ext_build/nanogui)
 set_property(TARGET nanogui glfw glfw_objects bin2c PROPERTY FOLDER "dependencies")
 
 # Build TBB
-set(TBB_BUILD_STATIC ON CACHE BOOL " " FORCE)
-set(TBB_BUILD_SHARED OFF CACHE BOOL " " FORCE)
+set(TBB_BUILD_STATIC OFF CACHE BOOL " " FORCE)
+set(TBB_BUILD_SHARED ON CACHE BOOL " " FORCE)
 set(TBB_BUILD_TBBMALLOC OFF CACHE BOOL " " FORCE)
 set(TBB_BUILD_TBBMALLOC_PROXY OFF CACHE BOOL " " FORCE)
 set(TBB_BUILD_TESTS OFF CACHE BOOL " " FORCE)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ext/tbb ext_build/tbb)
-set_property(TARGET tbb_static tbb_def_files PROPERTY FOLDER "dependencies")
+set_property(TARGET tbb tbb_def_files PROPERTY FOLDER "dependencies")
 
 # Compile instant meshes with various compiler warnings turned on
 if(MSVC)
@@ -173,7 +173,7 @@ add_executable(InstantMeshes MACOSX_BUNDLE
   ${EXTRA_SOURCE})
 
 add_definitions(${NANOGUI_EXTRA_DEFS})
-target_link_libraries(InstantMeshes tbb_static nanogui ${NANOGUI_EXTRA_LIBS})
+target_link_libraries(InstantMeshes tbb nanogui ${NANOGUI_EXTRA_LIBS})
 
 set_target_properties(InstantMeshes PROPERTIES OUTPUT_NAME "Instant Meshes")
 
