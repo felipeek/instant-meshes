@@ -28,7 +28,7 @@ extern "C" Mesh_Simple_Representation instant_meshes_wrapper_remesh(int vertices
     bool extrinsic = true, dominant = false, align_to_boundaries = false;
     bool fullscreen = false, help = false, deterministic = false, compat = false;
     int rosy = 4, posy = 4, face_count = -1, vertex_count = -1;
-    uint32_t knn_points = 10, smooth_iter = 2;
+    uint32_t knn_points = 10, smooth_iter = 0;
     Float crease_angle = -1, scale = -1;
     std::string batchOutput;
     #if defined(__APPLE__)

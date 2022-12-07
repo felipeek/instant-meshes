@@ -222,6 +222,7 @@ Mesh_Simple_Representation batch_process_in_memory(int vertices_size, const doub
     cout << "Running in batch mode:" << endl;
     cout << "   Input file             = From memory" << endl;
     cout << "   Output file            = To memory" << endl;
+    cout << "   Smooth iter            = " << smooth_iter << endl;
     cout << "   Rotation symmetry type = " << rosy << endl;
     cout << "   Position symmetry type = " << (posy==3?6:posy) << endl;
     cout << "   Crease angle threshold = ";
@@ -400,6 +401,7 @@ Mesh_Simple_Representation batch_process_in_memory(int vertices_size, const doub
     cout << "Extraction is done. (total time: " << timeString(timer.reset()) << ")" << endl;
 
     Mesh_Simple_Representation msr = write_to_memory(F_extr, O_extr, MatrixXf(), Nf_extr);
+    //write_obj("/home/felipeek/Desktop/batchtmp.obj", F_extr, O_extr, MatrixXf(), Nf_extr);
 
     if (bvh)
         delete bvh;
