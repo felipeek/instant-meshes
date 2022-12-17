@@ -38,6 +38,9 @@ extern "C" Mesh_Simple_Representation instant_meshes_wrapper_remesh(int vertices
     // set desired vertex count
     vertex_count = desired_vertex_count;
 
+	// test
+	align_to_boundaries = true;
+
     // make sure output is triangulated
     rosy = 6;
     posy = 3;
